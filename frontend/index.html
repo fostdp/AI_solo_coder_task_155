@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#16213e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CBM模拟">
+    <meta name="description" content="煤层气排水降压模拟全栈应用，实时展示气水两相流动和压力漏斗">
+    <meta name="application-name" content="煤层气排水降压模拟">
+    <meta name="msapplication-TileColor" content="#16213e">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>煤层气排水降压模拟系统</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+    <link rel="shortcut icon" href="/icons/icon.svg">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>煤层气排水降压模拟系统</h1>
+            <p class="subtitle">Coalbed Methane Drainage and Depressurization Simulator</p>
+        </header>
+
+        <div class="main-content">
+            <div class="simulation-area">
+                <div class="canvas-container">
+                    <canvas id="simulationCanvas" width="900" height="500"></canvas>
+                    <div class="canvas-overlay">
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color gas"></div>
+                                <span>气相 (Gas)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color water"></div>
+                                <span>水相 (Water)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color coal"></div>
+                                <span>煤层 (Coal)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color pressure-high"></div>
+                                <span>高压</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color pressure-low"></div>
+                                <span>低压</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-display">
+                    <div class="time-info">
+                        <label>模拟时间:</label>
+                        <span id="simTime">0 天</span>
+                    </div>
+                    <div class="status-badge" id="statusBadge">待启动</div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <div class="panel-section">
+                    <h2>控制参数</h2>
+                    
+                    <div class="control-group">
+                        <label for="drainageRate">排水速率 (m³/day)</label>
+                        <input type="range" id="drainageRate" min="0.1" max="20" step="0.1" value="5">
+                        <div class="value-display">
+                            <span id="drainageRateValue">5.0</span> m³/day
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="permeability">煤层渗透率 (mD)</label>
+                        <input type="range" id="permeability" min="0.01" max="10" step="0.01" value="1">
+                        <div class="value-display">
+                            <span id="permeabilityValue">1.00</span> mD
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="timeStep">时间步长 (小时)</label>
+                        <input type="range" id="timeStep" min="1" max="240" step="1" value="24">
+                        <div class="value-display">
+                            <span id="timeStepValue">24</span> 小时
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="speed">模拟速度</label>
+                        <input type="range" id="speed" min="1" max="100" step="1" value="10">
+                        <div class="value-display">
+                            <span id="speedValue">10</span>x
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>模拟控制</h2>
+                    <div class="button-group">
+                        <button id="startBtn" class="btn btn-primary">开始模拟</button>
+                        <button id="pauseBtn" class="btn btn-secondary" disabled>暂停</button>
+                        <button id="resetBtn" class="btn btn-warning">重置</button>
+                        <button id="saveBtn" class="btn btn-success">保存快照</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>实时数据</h2>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <label>井底压力</label>
+                            <span id="bottomholePressure">- MPa</span>
+                        </div>
+                        <div class="data-item">
+                            <label>临界解吸压力</label>
+                            <span id="criticalPressure">- MPa</span>
+                        </div>
+                        <div class="data-item">
+                            <label>平均储层压力</label>
+                            <span id="avgPressure">- MPa</span>
+                        </div>
+                        <div class="data-item">
+                            <label>产气量</label>
+                            <span id="gasRate">- m³/day</span>
+                        </div>
+                        <div class="data-item">
+                            <label>产水量</label>
+                            <span id="waterRate">- m³/day</span>
+                        </div>
+                        <div class="data-item">
+                            <label>气相饱和度</label>
+                            <span id="gasSaturation">- %</span>
+                        </div>
+                        <div class="data-item">
+                            <label>气相有效渗透率</label>
+                            <span id="kGas">- mD</span>
+                        </div>
+                        <div class="data-item">
+                            <label>水相有效渗透率</label>
+                            <span id="kWater">- mD</span>
+                        </div>
+                        <div class="data-item highlight">
+                            <label>气水比</label>
+                            <span id="gasWaterRatio">- m³/m³</span>
+                        </div>
+                        <div class="data-item">
+                            <label>累计产气</label>
+                            <span id="cumulativeGas">- m³</span>
+                        </div>
+                        <div class="data-item">
+                            <label>累计产水</label>
+                            <span id="cumulativeWater">- m³</span>
+                        </div>
+                        <div class="data-item">
+                            <label>基质收缩乘数</label>
+                            <span id="shrinkageMultiplier">-</span>
+                        </div>
+                        <div class="data-item">
+                            <label>井筒压降</label>
+                            <span id="wellboreDrop">- MPa</span>
+                        </div>
+                        <div class="data-item">
+                            <label>井口流动压力</label>
+                            <span id="surfacePressure">- MPa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>高级参数</h2>
+                    <div class="advanced-params">
+                        <div class="param-row">
+                            <label>初始压力 (MPa):</label>
+                            <input type="number" id="initialPressure" value="10" step="0.1" min="0.1">
+                        </div>
+                        <div class="param-row">
+                            <label>煤层厚度 (m):</label>
+                            <input type="number" id="reservoirThickness" value="10" step="0.5" min="1">
+                        </div>
+                        <div class="param-row">
+                            <label>井筒半径 (m):</label>
+                            <input type="number" id="wellRadius" value="0.1" step="0.01" min="0.01">
+                        </div>
+                        <div class="param-row">
+                            <label>排水半径 (m):</label>
+                            <input type="number" id="drainageRadius" value="500" step="10" min="50">
+                        </div>
+                        <div class="param-row">
+                            <label>孔隙度:</label>
+                            <input type="number" id="porosity" value="0.05" step="0.01" min="0.01" max="0.5">
+                        </div>
+                        <div class="param-row">
+                            <label>原始含气量 (m³/t):</label>
+                            <input type="number" id="gasContent" value="15" step="0.5" min="1">
+                        </div>
+                        <div class="param-row">
+                            <label>Langmuir压力 (MPa):</label>
+                            <input type="number" id="langmuirPressure" value="3" step="0.1" min="0.1">
+                        </div>
+                        <div class="param-row">
+                            <label>Langmuir体积 (m³/t):</label>
+                            <input type="number" id="langmuirVolume" value="20" step="0.5" min="1">
+                        </div>
+                        <div class="param-row">
+                            <label>基质收缩系数:</label>
+                            <input type="number" id="matrixShrinkage" value="0.01" step="0.001" min="0">
+                        </div>
+                        <button id="applyParamsBtn" class="btn btn-primary btn-small">应用参数</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2>历史快照</h2>
+                    <div id="snapshotList" class="snapshot-list">
+                        <p class="no-data">暂无保存的快照</p>
+                    </div>
+                    <button id="loadSnapshotsBtn" class="btn btn-secondary btn-small">刷新快照列表</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="plots-container">
+            <div class="plot-section">
+                <h3>压力分布曲线</h3>
+                <canvas id="pressureChart" width="450" height="200"></canvas>
+            </div>
+            <div class="plot-section">
+                <h3>饱和度分布曲线</h3>
+                <canvas id="saturationChart" width="450" height="200"></canvas>
+            </div>
+            <div class="plot-section">
+                <h3>产量历史曲线</h3>
+                <canvas id="productionChart" width="450" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

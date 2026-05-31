@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="coalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d2d2d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gasGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#e94560;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd93d;stop-opacity:0.8" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="512" height="512" rx="60" fill="url(#bgGrad)"/>
+  
+  <ellipse cx="256" cy="300" rx="180" ry="50" fill="url(#coalGrad)" opacity="0.9"/>
+  <ellipse cx="256" cy="310" rx="160" ry="40" fill="#3d3d3d" opacity="0.5"/>
+  
+  <rect x="240" y="120" width="32" height="180" fill="#8b7355" rx="4"/>
+  <rect x="244" y="125" width="24" height="170" fill="#a08060" rx="2"/>
+  
+  <g filter="url(#glow)">
+    <circle cx="256" cy="300" r="20" fill="url(#gasGrad)"/>
+    <circle cx="230" cy="280" r="10" fill="url(#gasGrad)" opacity="0.7"/>
+    <circle cx="280" cy="290" r="8" fill="url(#gasGrad)" opacity="0.8"/>
+    <circle cx="220" cy="310" r="12" fill="url(#gasGrad)" opacity="0.6"/>
+    <circle cx="290" cy="315" r="9" fill="url(#gasGrad)" opacity="0.75"/>
+  </g>
+  
+  <path d="M256 260 Q280 230 320 210" stroke="#4a90d9" stroke-width="6" fill="none" opacity="0.7"/>
+  <circle cx="320" cy="210" r="6" fill="#4a90d9"/>
+  
+  <circle cx="256" cy="110" r="20" fill="#333" stroke="#555" stroke-width="2"/>
+  <rect x="250" y="95" width="12" height="15" fill="#e94560" rx="2"/>
+</svg>

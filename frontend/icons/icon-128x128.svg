@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="gas128" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#ffd93d"/>
+    </linearGradient>
+    <filter id="glow128">
+      <feGaussianBlur stdDeviation="1.28" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="19.2" fill="url(#bg128)"/>
+  <ellipse cx="64" cy="76.8" rx="48.64" ry="12.8" fill="#2d2d2d"/>
+  <rect x="60.16" y="28.16" width="7.68" height="48.64" fill="#8b7355" rx="1.28"/>
+  <g filter="url(#glow128)">
+    <circle cx="64" cy="76.8" r="10.24" fill="url(#gas128)"/>
+    <circle cx="51.2" cy="70.4" r="5.12" fill="url(#gas128)" opacity="0.7"/>
+    <circle cx="76.8" cy="74.24" r="4.48" fill="url(#gas128)" opacity="0.8"/>
+  </g>
+  <circle cx="64" cy="25.6" r="10.24" fill="#333" stroke="#555" stroke-width="2"/>
+</svg>

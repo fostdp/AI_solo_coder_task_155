@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
+  <defs>
+    <linearGradient id="bg144" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="gas144" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#ffd93d"/>
+    </linearGradient>
+    <filter id="glow144">
+      <feGaussianBlur stdDeviation="1.44" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="144" height="144" rx="21.599999999999998" fill="url(#bg144)"/>
+  <ellipse cx="72" cy="86.39999999999999" rx="54.72" ry="14.4" fill="#2d2d2d"/>
+  <rect x="67.67999999999999" y="31.68" width="8.64" height="54.72" fill="#8b7355" rx="1.44"/>
+  <g filter="url(#glow144)">
+    <circle cx="72" cy="86.39999999999999" r="11.52" fill="url(#gas144)"/>
+    <circle cx="57.6" cy="79.2" r="5.76" fill="url(#gas144)" opacity="0.7"/>
+    <circle cx="86.39999999999999" cy="83.52" r="5.040000000000001" fill="url(#gas144)" opacity="0.8"/>
+  </g>
+  <circle cx="72" cy="28.8" r="11.52" fill="#333" stroke="#555" stroke-width="2"/>
+</svg>
